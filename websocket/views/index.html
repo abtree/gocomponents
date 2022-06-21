@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聊天</title>
+
+    <script>
+        window.onload = ()=>{
+            console.log("start conn websocket")
+            const msg = document.querySelector(".chat .msg");
+            let socket = new WebSocket("ws://localhost:8080/ws/echo");
+            socket.onopen = function(){
+                msg.innerHTML += "Socket connect success \n";
+                socket.send("Hi service\n");
+            };
+            socket.onmessage=function(e){
+                msg.innerHTML += "Server: "+e.data+"\n";
+            }
+            socket.onclose=function(){
+                msg.innerHTML += "Server close";
+            }
+
+            const btn = document.querySelector(".chat .input .submit");
+            btn.addEventListener("click", ()=>{
+                console.log("click send");
+                socket.send("click\n");
+            });
+        }
+    </script>
+</head>
+<body>
+    <section class="chat">
+        <div class="msg">
+
+        </div>
+        <div class="input">
+            <button class="submit">Submit</button>
+        </div>
+    </section>
+</body>
+</html>

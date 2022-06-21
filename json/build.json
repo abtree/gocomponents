@@ -1,0 +1,22 @@
+{
+	"paths":[
+		{
+			"name":"game",
+			"path":"../../../../game/configs"
+		}
+	],
+	"packages":[
+		"pb"
+	],
+	"structs":[
+		{
+		"name":"a/test",
+		"struct":"pbs.MsgCfgTest"
+		},
+		{
+		"name":"a/test1",
+		"field":"test",
+		"struct":"pbs.MsgCfgTest"
+		}
+	]
+}

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package pb;
+
+message CPriceItem{
+    sint32 mtype = 1;
+    string oriname = 2;
+    sint32 count = 3;
+    sint32 inner_param=4;
+    sint32 exinfo = 5;
+}
+
+message User{
+    string pwd = 1;
+    CPriceItem item = 2;
+    repeated CPriceItem awards = 3;
+}
+
+message MsgCfgBase{
+    string name = 1;
+    float rate = 2;
+}
+
+message MsgCfgTest{
+    sint32 id = 1;
+    MsgCfgBase base = 2;
+    bool open = 3;
+    repeated CPriceItem awards = 4;
+    repeated sint32 params = 5;
+}
