@@ -1,0 +1,168 @@
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+import "msg_config.proto"; 
+
+
+//---------------说明---------------------------
+//自动生成的pb 配置文件
+//----------------------------------------------
+
+package pb;
+
+//IniInitfor
+message IniFor{
+message CCol1{
+	uint32 A = 1;
+message Cb{
+	uint32 C = 1;
+	uint32 D = 2;
+} 
+	 repeated Cb B = 2;
+} 
+
+message CCol2{
+	 repeated uint32 A = 1;
+} 
+message JJsonDat{
+	 string b = 1;
+	 sint32 a = 2;
+} 
+
+	uint32 Text = 1;
+	repeated CCol1 Col1 = 2;
+	repeated CCol2 Col2 = 3;
+	repeated uint32 Arr = 4;
+	JJsonDat JsonDat = 5;
+}
+
+message Jjsonfor{
+	 repeated sint32 b = 1;
+message Jc{
+	 double d = 1;
+	 double e = 2;
+} 
+	 Jc c = 2;
+message Jf{
+	 string g = 1;
+	 string h = 2;
+} 
+	 repeated Jf f = 3;
+	 sint32 a = 4;
+} 
+//TxtTxtcreatemulti
+message MsgMultiCreateCfg{
+message CDat{
+	string Dat1 = 1;
+	uint32 Dat2 = 2;
+} 
+
+	uint32 Key = 1;
+	repeated CDat Dat = 2;
+}
+
+//TxtTxtfor
+message TextFor{
+message CCol1{
+	uint32 A = 1;
+message Cb{
+	uint32 C = 1;
+	uint32 D = 2;
+} 
+	 repeated Cb B = 2;
+} 
+
+message CCol2{
+	uint32 A = 1;
+	 repeated uint32 B = 2;
+} 
+
+message CCol3{
+	 repeated uint32 A = 1;
+} 
+
+message CCol4{
+	uint32 A = 1;
+	 repeated uint32 B = 2;
+	uint32 C = 3;
+} 
+
+message CCol5{
+message Ca{
+	uint32 B = 1;
+	uint32 C = 2;
+} 
+	 repeated Ca A = 1;
+} 
+
+	uint32 Key = 1;
+	repeated CCol1 Col1 = 2;
+	repeated CCol2 Col2 = 3;
+	repeated CCol3 Col3 = 4;
+	repeated CCol4 Col4 = 5;
+	repeated CCol5 Col5 = 6;
+}
+
+//TxtTxtmulti
+message MsgMultiCfg{
+	uint32 Key = 1;
+	repeated MsgMultiTest Dat = 2;
+}
+
+//TxtTxtother
+message MsgOther{
+	uint32 Key = 1;
+	CPriceItem Item = 2;
+	repeated uint32 Param = 3;
+}
+
+//D
+message RankAct{
+	sint32 MailID = 1;
+	int64 ChangeBeforEnd = 2;
+	int64 RefereshTime = 3;
+}
+
+//Df
+message MsgOtherDir{
+	uint32 Key = 1;
+	CPriceItem Item = 2;
+	repeated uint32 Param = 3;
+}
+
+message Msg1Dir{
+	RankAct D = 1;
+	map<uint32, MsgOtherDir> Df = 2;
+}
+//File
+message MsgOtherFile{
+	uint32 Key = 1;
+	CPriceItem Item = 2;
+	repeated uint32 Param = 3;
+}
+
+message Msg2File{
+	map<uint32, MsgOtherFile> File = 1;
+}
+message MsgConfigs {
+	map<string,bytes> unhandle = 1;
+	
+	IniFor IniInitfor = 2;
+	Jjsonfor JsonJsonfor = 3;
+	map<uint32, MsgMultiCreateCfg> TxtTxtcreatemulti = 4;
+	map<uint32, TextFor> TxtTxtfor = 5;
+	map<uint32, MsgMultiCfg> TxtTxtmulti = 6;
+	map<uint32, MsgOther> TxtTxtother = 7;
+}
+message MsgYYactConfigs {
+	map<string,bytes> unhandle = 1;
+	map<uint32, Msg1Dir> YY1Dir = 2;
+	map<uint32, Msg2File> YY2File = 3;
+}
+
+	message MsgAllConfigs{
+		MsgConfigs Configs = 1;
+		MsgYYactConfigs Yyacts = 2;
+	}
+	

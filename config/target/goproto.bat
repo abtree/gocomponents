@@ -1,0 +1,1 @@
+protoc -I=. --go_out=plugins=grpc:../pb/ msg_config.proto msg_cfg_auto.proto

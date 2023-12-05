@@ -1,0 +1,29 @@
+基于openssl生成证书
+修改配置
+1.配置位置
+	linux系统 : /etc/pki/tls/openssl.cnf
+	Mac系统: /System/Library/OpenSSL/openssl.cnf
+	Windows：安装目录下 openssl.cfg 比如 D:\Program Files\OpenSSL-Win64\bin\openssl.cfg
+2.拷贝配置文件到项目 然后修改
+	cp /System/Library/OpenSSL/openssl.cnf ./
+3.找到 [ CA_default ]，打开 copy_extensions = copy
+4.找到[ req ]，打开 req_extensions = v3_req
+5.找到[ v3_req ]，添加 subjectAltName = @alt_names
+6.添加新的标签 [ alt_names ] , 和标签字段
+	[ alt_names ]
+	DNS.1 = localhost
+	DNS.2 = *.custer.fun
+
+生成CA
+openssl genrsa -out ca.key 2048
+openssl req -new -x509 -days 7200 -key ca.key -out ca.pem
+
+生成Server
+openssl genpkey -algorithm RSA -out server.key
+openssl req -new -nodes -key server.key -out server.csr -days 3650 -subj "/C=cn/OU=devhg/O=devhg/CN=localhost" -config ./openssl.cnf -extensions v3_req
+openssl x509 -req -days 3650 -in server.csr -out server.pem -CA ca.pem -CAkey ca.key -CAcreateserial -extfile ./openssl.cnf -extensions v3_req
+
+生成Client
+openssl genpkey -algorithm RSA -out client.key
+openssl req -new -nodes -key client.key -out client.csr -days 3650 -subj "/C=cn/OU=devhg/O=devhg/CN=localhost" -config ./openssl.cnf -extensions v3_req
+openssl x509 -req -days 3650 -in client.csr -out client.pem -CA ca.pem -CAkey ca.key -CAcreateserial -extfile ./openssl.cnf -extensions v3_req

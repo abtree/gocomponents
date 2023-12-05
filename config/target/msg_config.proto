@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+//---------------说明---------------------------
+//配置文件使用的pb
+//----------------------------------------------
+
+package pb;
+
+message MsgMultiTest{
+    string Dat1 = 1;
+    sint32 Dat2 = 2;
+}
+
+message CPriceItem{
+    uint32 typ = 1;
+    string oriname = 2;
+    uint32 cnt = 3;
+    uint32 inner = 4;
+    uint32 exinfo = 5;
+}

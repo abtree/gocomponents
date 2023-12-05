@@ -1,0 +1,4 @@
+
+^MsgOther	uint32:Key	CPriceItem:_Item	[]uint32:_Param	:Param
+#	1	3_CE001_100	1_2_3	4
+#	2	3_CE001_100	1_2_3	4

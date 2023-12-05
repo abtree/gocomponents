@@ -1,0 +1,5 @@
+
+^MsgMultiCfg	uint32:Key	[]MsgMultiTest:Dat.Dat1	:Dat.Dat2	.multi:Dat
+#	1	aaa	1
+#	1	bbb	2
+#	2	ccc	3

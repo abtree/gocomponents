@@ -30,3 +30,13 @@ message MsgCfgTest{
     repeated CPriceItem awards = 4;
     repeated sint32 params = 5;
 }
+
+message CfgCfg{	
+    float A = 1;	 
+    repeated float B = 2;
+    message Cfgc{	
+        float D = 1;	
+        float E = 2;
+    }	 
+    Cfgc C = 3;
+}

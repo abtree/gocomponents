@@ -1,0 +1,5 @@
+
+^MsgMultiCreateCfg	uint32:Key	[{".Dat1":"string",".Dat2":"uint32"}]:Dat.Dat1	:Dat.Dat2	.multi:Dat
+#	1	aaa	1
+#	1	bbb	2
+#	2	ccc	3

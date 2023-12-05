@@ -1,0 +1,7 @@
+[RankAct]
+; 邮件ID
+MailID = 114
+; 修改刷新时间倒计时(秒)
+int64ChangeBeforEnd = 7200
+; 刷新时间
+int64RefereshTime = 60
