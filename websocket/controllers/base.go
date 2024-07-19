@@ -16,7 +16,7 @@ import (
 )
 
 type baseController struct {
-	conn net.Conn
+	conn    net.Conn
 	keyGUID []byte
 }
 
@@ -33,10 +33,10 @@ var closeCodes map[int]string = map[int]string{
 }
 
 var BaseController = &baseController{
-	keyGUID: []byte("258EAFA5-E914-47DA-95CA-C5AB0DC85B11"),
+	keyGUIF: []byte("258EAFA5-E914-47DA-95CA-C5AB0DC85B11"),
 }
 
-func (ctr *baseController)computeAcceptKey(challengeKey string) string{
+func (ctr *baseController) computeAcceptKey(challengeKey string) string {
 	h := sha1.New()
 	h.Write([]byte(challengeKey))
 	h.Write(ctr.keyGUID)
@@ -45,18 +45,18 @@ func (ctr *baseController)computeAcceptKey(challengeKey string) string{
 
 func (ctr *baseController) Init(w http.ResponseWriter, r *http.Request) {
 	hj, ok := w.(http.Hijacker)
-	if(!ok){
+	if !ok {
 		http.Error(w, "webserver doesn't support hijacking", http.StatusInternalServerError)
 		return
 	}
 	var err error
 	ctr.conn, _, err = hj.Hijack()
-	if err != nil{
+	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		ctr.conn.Close()
 		return
 	}
-	challengeKey := ctr.computeAcceptKey(r.Header.Get("Sec-Websocket-Key"));
+	challengeKey := ctr.computeAcceptKey(r.Header.Get("Sec-Websocket-Key"))
 	//建立连接时的固定写法
 	lines := []string{
 		"HTTP/1.1 101 Web Socket Protocol Handshake",
@@ -65,10 +65,10 @@ func (ctr *baseController) Init(w http.ResponseWriter, r *http.Request) {
 		"Connection: Upgrade",
 		"Sec-WebSocket-Accept: " + challengeKey,
 		"",
-		"", // required for extra CRLF 
+		"", // required for extra CRLF
 	}
-	
-	if _, err = ctr.conn.Write([]byte(strings.Join(lines, "\r\n"))); err != nil{
+
+	if _, err = ctr.conn.Write([]byte(strings.Join(lines, "\r\n"))); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		ctr.conn.Close()
 		return
@@ -76,22 +76,22 @@ func (ctr *baseController) Init(w http.ResponseWriter, r *http.Request) {
 	go ctr.Recv()
 }
 
-func (ctr *baseController) Recv(){
+func (ctr *baseController) Recv() {
 	for {
-		fr,err := ctr.read()
-		if err != nil{
+		fr, err := ctr.read()
+		if err != nil {
 			return
 		}
-		switch fr.opcode{
-		case 8:	//close
+		switch fr.opcode {
+		case 8: //close
 			ctr.conn.Close()
 			return
 		case 9: //Ping
 			fr.pong()
 			fallthrough
-		case 0,1,2:	// continuation, text, binary
+		case 0, 1, 2: // continuation, text, binary
 			log.Println("Recv:", fr.test())
-			if err = ctr.SendText("aaaaaaaaa"); err != nil{
+			if err = ctr.SendText("aaaaaaaaa"); err != nil {
 				log.Println("Error sending", err)
 				return
 			}
@@ -99,24 +99,24 @@ func (ctr *baseController) Recv(){
 	}
 }
 
-func (ctr *baseController)read()(*frame, error){
+func (ctr *baseController) read() (*frame, error) {
 	fr := &frame{}
 	head, err := ctr.slice(2)
 	if err != nil {
 		return fr, err
 	}
-	fr.isFragment = (head[0] & 0x80) == 0x00;
-	fr.opcode = head[0]&0x0F
+	fr.isFragment = (head[0] & 0x80) == 0x00
+	fr.opcode = head[0] & 0x0F
 	fr.reserved = (head[0] & 0x70)
-	fr.ismasked = (head[1]&0x80) == 0x80
+	fr.ismasked = (head[1] & 0x80) == 0x80
 	length := uint64(head[1] & 0x7F)
-	if length == 126{
+	if length == 126 {
 		data, err := ctr.slice(2)
 		if err != nil {
 			return fr, err
 		}
 		length = uint64(binary.BigEndian.Uint16(data))
-	}else if length == 127{
+	} else if length == 127 {
 		data, err := ctr.slice(8)
 		if err != nil {
 			return fr, err
@@ -132,7 +132,7 @@ func (ctr *baseController)read()(*frame, error){
 	if err != nil {
 		return fr, err
 	}
-	for i := uint64(0); i<length; i++{
+	for i := uint64(0); i < length; i++ {
 		payload[i] ^= mask[i%4]
 	}
 	fr.payload = payload
@@ -140,7 +140,7 @@ func (ctr *baseController)read()(*frame, error){
 	return fr, err
 }
 
-func (ctr *baseController) validate(fr *frame) error{
+func (ctr *baseController) validate(fr *frame) error {
 	if !fr.ismasked {
 		return errors.New("protocol error: unmasked client frame")
 	}
@@ -172,20 +172,20 @@ func (ctr *baseController) validate(fr *frame) error{
 	}
 	return nil
 }
-func (ctr *baseController)slice(size int)([]byte, error){
+func (ctr *baseController) slice(size int) ([]byte, error) {
 	data := make([]byte, 0)
-	for{
-		if len(data) == size{
+	for {
+		if len(data) == size {
 			break
 		}
 		sz := 4096
 		remaining := size - len(data)
-		if sz > remaining{
+		if sz > remaining {
 			sz = remaining
 		}
 		temp := make([]byte, sz)
 		n, err := ctr.conn.Read(temp)
-		if err != nil && err != io.EOF{
+		if err != nil && err != io.EOF {
 			return data, err
 		}
 		data = append(data, temp[:n]...)
@@ -193,39 +193,39 @@ func (ctr *baseController)slice(size int)([]byte, error){
 	return data, nil
 }
 
-func (ctr *baseController)SendText(txt string) error{
+func (ctr *baseController) SendText(txt string) error {
 	fr := &frame{
 		isFragment: false,
-		opcode: 1,
-		payload: []byte(txt),
+		opcode:     1,
+		payloaF:    []byte(txt),
 	}
 	fr.length = uint64(len(fr.payload))
 	return ctr.Send(fr)
 }
 
-func (ctr *baseController)Send(fr *frame) error {
+func (ctr *baseController) Send(fr *frame) error {
 	data := make([]byte, 2)
 	data[0] = 0x80 | fr.opcode
-	if fr.isFragment{
+	if fr.isFragment {
 		data[0] &= 0x7F
 	}
-	if fr.length <= 125{
+	if fr.length <= 125 {
 		data[1] = byte(fr.length)
 		data = append(data, fr.payload...)
-	}else if fr.length > 125 && float64(fr.length) < math.Pow(2, 16){
+	} else if fr.length > 125 && float64(fr.length) < math.Pow(2, 16) {
 		data[1] = byte(126)
 		size := make([]byte, 2)
 		binary.BigEndian.PutUint16(size, uint16(fr.length))
 		data = append(data, size...)
 		data = append(data, fr.payload...)
-	}else if float64(fr.length) >= math.Pow(2, 16){
+	} else if float64(fr.length) >= math.Pow(2, 16) {
 		data[1] = byte(127)
 		size := make([]byte, 8)
 		binary.BigEndian.PutUint16(size, uint16(fr.length))
 		data = append(data, size...)
 		data = append(data, fr.payload...)
 	}
-	if _, err := ctr.conn.Write(data); err != nil{
+	if _, err := ctr.conn.Write(data); err != nil {
 		return err
 	}
 	return nil

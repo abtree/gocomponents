@@ -296,7 +296,7 @@ func _Greeter_SayHello_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.Greeter/SayHello",
+		FullMethoF: "/pb.Greeter/SayHello",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(GreeterServer).SayHello(ctx, req.(*HelloRequest))

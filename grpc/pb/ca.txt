@@ -3,7 +3,7 @@
 1.配置位置
 	linux系统 : /etc/pki/tls/openssl.cnf
 	Mac系统: /System/Library/OpenSSL/openssl.cnf
-	Windows：安装目录下 openssl.cfg 比如 D:\Program Files\OpenSSL-Win64\bin\openssl.cfg
+	Windows：安装目录下 openssl.cfg 比如 F:\Program Files\OpenSSL-Win64\bin\openssl.cfg
 2.拷贝配置文件到项目 然后修改
 	cp /System/Library/OpenSSL/openssl.cnf ./
 3.找到 [ CA_default ]，打开 copy_extensions = copy
